@@ -1,0 +1,139 @@
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Checklist</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+  <label>Progress : </label>
+  <p><ngb-progressbar type="success" [value]="percentage" [striped]="true" [animated]="true"><i><b>{{percentage}}%</b></i></ngb-progressbar></p>
+
+<ngb-accordion [closeOthers]="false" activeIds="static-2">
+  <ngb-panel id="static-1" title="Checklist Information">
+    <ng-template ngbPanelContent>
+    <div class="card">
+      <div class="card-block">
+      <form [formGroup]="formChecklist">
+          <div class="form-content">
+              <div class="row">
+                    <div class="col">
+                            <div class="form-group">
+                                <label>Project Name</label>
+                                <input
+                                    readonly
+                                    #projectName
+                                    formControlName="projectName" 
+                                    type="text" 
+                                    ng-model="projectName" 
+                                    class="form-control input-underline input-lg" 
+                                    id="projectName">
+                            </div>
+                          </div>
+                  <div class="col">
+                    <div class="form-group">
+                        <label>Module Name</label>
+                        <input
+                            readonly
+                            #moduleName3
+                            formControlName="moduleName3" 
+                            type="text" 
+                            ng-model="moduleName3" 
+                            class="form-control input-underline input-lg" 
+                            id="moduleName3">
+                    </div>
+                  </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <label>Function Name</label>
+                        <input
+                            readonly
+                            #funcName3
+                            formControlName="funcName3" 
+                            type="text" 
+                            ng-model="funcName3" 
+                            class="form-control input-underline input-lg" 
+                            id="funcName3">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <label>Phase Name</label>
+                        <input
+                            readonly
+                            #phaseName
+                            formControlName="phaseName" 
+                            type="text"
+                            ng-model="phaseName" 
+                            class="form-control input-underline input-lg" 
+                            id="phaseName">
+                    </div>
+                </div>
+              </div>
+          </div>
+      </form>
+      </div>
+    </div>
+    </ng-template>
+  </ngb-panel>
+
+  <ngb-panel *ngIf="ROLE == 4 || ROLE == 1" id="static-3" title="Add Checklist">
+      <ng-template ngbPanelContent>
+        <app-add-checklist [phaseID]="phaseID" (updateChecklist)="updateDataChecklist()"></app-add-checklist>
+      </ng-template>
+  </ngb-panel>
+
+  <ngb-panel *ngIf="ROLE == 4 || ROLE == 1 || ROLE == 2" id="static-4" title="Upload Document">
+    <ng-template ngbPanelContent>
+        <label>Import Document for this phase (format .xlsx)</label><br>
+        <input type="file" ng2FileSelect [uploader]="uploader" />
+        <button class="btn btn-primary pull-right" (click)="isAddedFileUpload(); uploader.uploadAll();">Upload</button>&nbsp;&nbsp;&nbsp;
+    </ng-template>
+  </ngb-panel>
+
+  <ngb-panel id="static-2" title="Checklist">
+    <ng-template ngbPanelContent>
+    <div class="card mb-3">
+        <div class="card-block">
+            <div class="overflow">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let item of checklistData">
+                                <td>
+                                    <div class="form-check" *ngIf="item.checklist_status == 0">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" (change)="checked($event, item.checklist_id, item.checklist_status)">
+                                            {{item.checklist_text}}
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check" *ngIf="item.checklist_status == 1">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" (change)="checked($event, item.checklist_id, item.checklist_status)" checked>
+                                            {{item.checklist_text}}
+                                        </label>
+                                    </div>
+                                </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+
+
+
+  </div>
+  <div class="modal-footer">
+  </div>
+</ng-template>
+
+<button *ngIf="type == 1" class="dropdown-item" (click)="open(content)">Checklist</button>
+<a *ngIf="type == 2" class="href" [style.color]="'#0033cc'"[style.text-decoration]="'underline'" (click)="open(content)">{{buttonName}}</a>
+

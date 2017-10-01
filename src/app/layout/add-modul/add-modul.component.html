@@ -1,0 +1,334 @@
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Module</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+<div class="row">
+    <div class="col">
+        <div class="card mb-3 tinggi">
+            <div class="card-block tinggi">
+
+                <form [formGroup]="formAddModule">
+                    <div class="form-content">
+                        <div class="form-group">
+                            <label>Module Name</label>
+                            <input
+                                #moduleName
+                                formControlName="moduleName" 
+                                type="text" 
+                                ng-model="moduleName" 
+                                class="form-control input-underline input-lg" 
+                                id="moduleName">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Module Code</label>
+                            <input
+                                #moduleCode
+                                formControlName="moduleCode" 
+                                type="text" 
+                                ng-model="moduleCode" 
+                                class="form-control input-underline input-lg" 
+                                id="moduleCode">
+                        </div><br><br><br>
+                        <button class="btn btn-primary pull-right" (click)="addModule(moduleName, moduleCode)">Add Module</button>
+                        <button style="margin-right:10px" class="btn btn-primary pull-right" (click)="editModule()" *ngIf="updateModulFlag">Update Module</button>                   
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card mb-3 lebar">
+            <div class="card-block lebar">
+              <div class="overflow">
+
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Module Name</th>
+                        <th>Code</th>
+                        <th style="text-align:left">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let module of moduleNameData">
+                        <td width="30%">{{module.module_name}}</td>
+                        <td>{{module.module_code_name}}</td>
+                        <td width="70%">
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-primary btn-block aku" (click)="addFunction(addFunctionModal, module.module_name, module.module_code_name, module.module_id)">Add Function</button>
+                                </div>
+                                <div class="col">
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>Action</button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                            <button class="dropdown-item" (click)="editModule(module.module_id, module.module_name, module.module_code_name)">Edit</button>
+                                            <button class="dropdown-item" (click)="deleteModule(module.module_id)">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  </div>
+  <div class="modal-footer">
+    
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Add Module</button>
+
+<!--modal add function-->
+<ng-template #addFunctionModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Function to {{currentModuleName}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!--MODAL START-->
+<ngb-accordion [closeOthers]="true" activeIds="Satu">
+  <ngb-panel title="Add Function" id="Satu">
+    <ng-template ngbPanelContent>
+
+
+                    <form [formGroup]="formAddFunction">
+                        <div class="form-content">
+
+                            <div class="form-group">
+                                <label>Function Name</label>
+                                <input
+                                    #functionName
+                                    formControlName="functionName" 
+                                    type="text" 
+                                    ng-model="functionName" 
+                                    class="form-control input-underline input-lg" 
+                                    id="functionName">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Function Code</label>
+                                <input
+                                    #functionCode
+                                    formControlName="functionCode" 
+                                    type="text" 
+                                    ng-model="functionCode" 
+                                    class="form-control input-underline input-lg" 
+                                    id="functionCode">
+                            </div>
+
+                            <hr>
+                            
+                            <div *ngFor="let phase of sendData.phase_details; let i = index">
+                                <div class="form-group">
+                                    <a class="btn btn-secondary btn-sm" (click)="deleteDOM(phase.phase_phasename_id)">
+                                    <i class="fa fa-window-close" aria-hidden="true"></i></a>
+                                        <label>
+                                            {{phase.phase_name}}
+                                        </label>
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="input-group">
+                                                    <input 
+                                                        (ngModelChange)="pushPhase(phase.phase_phasename_id,0,1,$event)"
+                                                        formControlName="startDate1" 
+                                                        (click)="startDate1.toggle()"
+                                                        class="form-control"
+                                                        placeholder="Start Date"
+                                                        ng-model="startDate1" 
+                                                        ngbDatepicker 
+                                                        #startDate1="ngbDatepicker"
+                                                    >
+                                                    <div class="input-group-addon" (click)="startDate1.toggle()" >
+                                                        <span class="fa fa-calendar"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col">
+                                                <div class="input-group">
+                                                    <input 
+                                                        (ngModelChange)="pushPhase(phase.phase_phasename_id,0,2,$event)"
+                                                        formControlName="endDate1" 
+                                                        (click)="endDate1.toggle()"
+                                                        class="form-control"
+                                                        placeholder="End Date"
+                                                        ng-model="endDate1" 
+                                                        ngbDatepicker 
+                                                        #endDate1="ngbDatepicker"
+                                                    >
+                                                    <div class="input-group-addon" (click)="endDate1.toggle()" >
+                                                        <span class="fa fa-calendar"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <ng-select [allowClear]="true"
+                                                                [items]="items"
+                                                                [active]="active"
+                                                                (data)="refreshValue($event)"
+                                                                (selected)="pushPhase(phase.phase_phasename_id,0,0,$event)"
+                                                                (removed)="removed($event)"
+                                                                (typed)="typed($event)"
+                                                                placeholder="Select PIC">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                        </div><!--END ROW-->
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <select
+                                                        #phaseStatus
+                                                        (ngModelChange)="finishStatus($event, i)"
+                                                        formControlName="phaseStatus"
+                                                        ng-model="phaseStatus"
+                                                        id="phaseStatus"
+                                                        placeholder="Finish Status"
+                                                        class="form-control">
+                                                            <option>Unknown</option>
+                                                            <option>Finished</option>
+                                                            <option>Postpone</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input 
+                                                        [attr.disabled]="phase.flag"
+                                                        formControlName="phaseDate" 
+                                                        (click)="phaseDate.toggle()"
+                                                        class="form-control"
+                                                        placeholder="Effective Date"
+                                                        ng-model="phaseDate" 
+                                                        (ngModelChange)="finPosDate(i,phaseDate)"
+                                                        ngbDatepicker 
+                                                        #phaseDate="ngbDatepicker"
+                                                    >
+                                                    <div class="input-group-addon" (click)="phaseDate.toggle()" >
+                                                        <span class="fa fa-calendar"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <textarea
+                                                        id="note"
+                                                        class="form-control"
+                                                        (ngModelChange)="pushPhase(phase.phase_phasename_id,0,4,$event)"
+                                                        cols="130"
+                                                        formControlName="note"
+                                                        #note
+                                                        placeholder="Message"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                    <label>
+                                        Add New Phase
+                                    </label>
+
+                                    <div class="row">
+                                        <div class="col-xl-11">
+                                            <input
+                                                #newPhase
+                                                formControlName="newPhase" 
+                                                type="text" 
+                                                ng-model="newPhase" 
+                                                class="form-control input-underline input-lg" 
+                                                id="newPhase">
+                                        </div>
+
+                                        <div class="col-xl-1">
+                                            <button class="btn btn-default" (click)="getIDNewPhase()">Add</button>
+                                        </div>
+
+                                    </div>
+                            </div>
+                            <br><br><br>
+                            <button class="btn btn-primary pull-right" (click)="postToServer()">Add Function</button>
+                        </div>
+                    </form>
+
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel title="Function List" id="Dua">
+    <ng-template ngbPanelContent>
+            <div class="card mb-3">
+                <div class="card-block">
+                <div class="overflow-function">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="text-align:left">Function Name</th>
+                            <th style="text-align:left">Code</th>
+                            <th style="text-align:left">Phase</th>
+                            <th style="text-align:left">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let data of finalFiltered" >
+                            <td>
+                                {{data.function_name}}
+                            </td>
+                            <td>
+                                {{data.function_code}}
+                            </td>
+                            <td>
+                                {{data.Phase}}
+                            </td>
+                            <td>
+                                <div ngbDropdown class="d-inline-block">
+                                    <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>Action</button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <app-phase-detail [phaseID]="data.phase_id" [type]="1"></app-phase-detail>
+                                        <button class="dropdown-item" (click)="deletePhase(data.phase_id)">Delete</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+    <!--MODAL END-->
+  </div>
+  <div class="modal-footer">
+        
+  </div>
+</ng-template>
+

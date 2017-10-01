@@ -1,0 +1,1059 @@
+<div class="pos-f-t fixed-top header">
+    <nav class="navbar navbar-inverse bg-inverse navbar-toggleable-md">
+        <a class="navbar-brand" href="javascript:void(0)">Progress Tracking</a>
+        <div class="col-md-5">
+            <button *ngIf="ROLE == 4" class="btn btn-default" (click)="open(content)">User Management</button>&nbsp;&nbsp;
+            <app-off-date *ngIf="ROLE == 4"></app-off-date>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto mt-2 mt-md-0">
+                <li class="nav-item dropdown" ngbDropdown>
+                    <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
+                        <i class="fa fa-user-circle-o"></i> {{userName}} <b class="caret"></b>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a *ngIf="ROLE == 4" class="dropdown-item" (click)="open(changeAdminPassword)"><i class="fa fa-fw fa-cogs"></i> Change Password</a>
+                        <a class="dropdown-item" [routerLink]="['/login']" (click)="onLoggedout()"><i class="fa fa-fw fa-power-off"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<!--DASHBOARD-->
+    <ngb-accordion [closeOthers]="true" activeIds="static-1">
+    <ngb-panel id="static-1" title="Select Project">
+        <ng-template ngbPanelContent>
+            <form [formGroup]="formDashboard">
+                <div class="form-content">
+                    <div class="form-group">
+                        <label>Project Name</label>
+<!--                        <select
+                            (ngModelChange)="projectNameChange($event)"
+                            #projectName
+                            formControlName="projectName"
+                            ng-model="projectName"
+                            id="projectName"
+                            class="form-control">
+                                    <option *ngFor="let item of projectData"
+                                        [selected]="item.project_id==1 ? true : null"
+                                        >{{item.project_name}}</option>
+                        </select>-->
+                        <ng-select [allowClear]="true"
+                                    [items]="items"
+                                    [active]="active"
+                                    (data)="refreshValue($event)"
+                                    (selected)="projectNameChange($event)"
+                                    (removed)="removed($event)"
+                                    (typed)="typed($event)">
+                        </ng-select>
+                    </div>
+                <div id="collapseExample" [ngbCollapse]="isCollapsed">
+
+                    <div class="form-group">
+                        <label>Project Title</label>
+                        <input
+                            #projectTitle
+                            formControlName="projectTitle"
+                            type="text"
+                            ng-model="projectTitle"
+                            class="form-control input-underline input-lg"
+                            id="projectTitle">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Client Name</label>
+                        <input
+                            #clientName
+                            formControlName="clientName"
+                            type="text"
+                            ng-model="clientName"
+                            class="form-control input-underline input-lg"
+                            id="clientName">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Client Email</label>
+                        <input
+                            #clientEmail
+                            formControlName="clientEmail"
+                            type="text"
+                            ng-model="clientEmail"
+                            class="form-control input-underline input-lg"
+                            id="clientEmail">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Client Phone</label>
+                        <input
+                            #clientPhone
+                            formControlName="clientPhone"
+                            type="text"
+                            ng-model="clientPhone"
+                            class="form-control input-underline input-lg"
+                            id="clientPhone">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Client Address</label>
+                        <input
+                            #clientAddress
+                            formControlName="clientAddress"
+                            type="text"
+                            ng-model="clientAddress"
+                            class="form-control input-underline input-lg"
+                            id="clientAddress">
+                    </div>
+
+<!--                    <div class="form-group">
+                        <label>Project Status</label>
+                        <select
+                            #projectStatus
+                            formControlName="projectStatus"
+                            ng-model="projectStatus"
+                            id="projectStatus"
+                            class="form-control">
+                                    <option></option>
+                        </select>
+                    </div>-->
+
+                </div>
+
+                    <div class="form-group">
+                        <input
+                            hidden
+                            #projectID
+                            formControlName="projectID"
+                            type="text"
+                            ng-model="projectID"
+                            class="form-control input-underline input-lg"
+                            id="projectID">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <div class="input-group">
+                            <input
+                                readonly
+                                formControlName="startDate"
+                                class="form-control"
+                                placeholder="yyyy-mm-dd"
+                                ng-model="startDate"
+                                #startDate
+                            >
+                            <div class="input-group-addon" (click)="startDate.toggle()" >
+                                <span class="fa fa-calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <div class="input-group">
+                            <input
+                                readonly
+                                formControlName="endDate"
+                                class="form-control"
+                                placeholder="yyyy-mm-dd"
+                                ng-model="endDate"
+                                #endDate
+                            >
+                            <div class="input-group-addon" (click)="endDate.toggle()" >
+                                <span class="fa fa-calendar"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+            <br>
+            <div class="row pull-right">
+                <app-add-project *ngIf="ROLE == 4 || ROLE == 1" (change)="updateProjectList()"></app-add-project>&nbsp;&nbsp;&nbsp;
+
+                <app-add-modul *ngIf="ROLE == 4 || ROLE == 1" (updateDashboard)="updateDashboard($event)"></app-add-modul>&nbsp;&nbsp;&nbsp;
+
+                <button *ngIf="ROLE == 4 || ROLE == 1" class="btn btn-lg btn-outline-primary" (click)="openEdit(editModuleContent)">Edit Data</button>&nbsp;&nbsp;&nbsp;
+
+                <button *ngIf="ROLE == 4 || ROLE == 1" type="button" class="btn btn-lg btn-outline-primary" (click)="isCollapsed = !isCollapsed; changeName(!isCollapsed)"
+                    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+                    {{buttonString}}
+                </button>
+                <!--<app-edit-project></app-edit-project>-->&nbsp;
+
+            </div>
+        </ng-template>
+    </ngb-panel>
+    <ngb-panel id="static-2" title="Data Table">
+            <ng-template ngbPanelContent>
+            <form [formGroup]="formFilterTable">
+                <div class="form-content">
+                    <div class="row">
+                            <div class="col">
+
+                                    <div class="form-group">
+                                        <input
+                                            #PIC
+                                            formControlName="PIC"
+                                            type="text"
+                                            ng-model="PIC"
+                                            class="form-control input-underline input-lg"
+                                            id="PIC"
+                                            placeholder="PIC Name">
+                                    </div>
+                            </div>
+                            <div class="col">
+                                    <div class="form-group">
+                                        <input
+                                            #FuncName
+                                            formControlName="FuncName"
+                                            type="text"
+                                            ng-model="FuncName"
+                                            class="form-control input-underline input-lg"
+                                            id="FuncName"
+                                            placeholder="Function Name">
+                                    </div>
+
+                            </div>
+                            <div class="col">
+                                    <div class="form-group">
+                                        <input
+                                            #Phase
+                                            formControlName="Phase"
+                                            type="text"
+                                            ng-model="Phase"
+                                            class="form-control input-underline input-lg"
+                                            id="Phase"
+                                            placeholder="Phase Name">
+                                    </div>
+                            </div>
+                            <div class="col">
+                                    <div class="form-group">
+                                        <input
+                                            #ModuleName
+                                            formControlName="ModuleName"
+                                            type="text"
+                                            ng-model="ModuleName"
+                                            class="form-control input-underline input-lg"
+                                            id="ModuleName"
+                                            placeholder="Module Name">
+                                    </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row pull-right">
+                            <button
+                                class="btn btn-primary pull-right"
+                                style="margin-right:6px"
+                                (click)="filteredByAND()">Filter Data</button>
+                        </div>
+
+                        <div class="row pull-right">
+                            <button
+                                class="btn btn-primary pull-right"
+                                style="margin-right:27px"
+                                (click)="reloadDataTable()">Reload Data</button>
+                        </div>
+
+                        <div class="row pull-right">
+                            <button
+                                class="btn btn-primary pull-right"
+                                style="margin-right:27px"
+                                (click)="clearFilter()">Clear Filter</button>
+                        </div>
+
+                </div>
+            </form>
+            <br><br><hr><br>
+
+                <div class="row">
+                <div class="row">
+                    <div class="col" style="margin-left:4px;">
+                        <div id="rectangle" [style.background-color]="'#A2A9AF'"></div>
+                    </div>
+                    <div class="col">
+                        <p style="width:70px">OFF DAY</p>
+                    </div>
+                    <div class="col">
+                        <div id="rectangle" [style.background-color]="'#00A0B0'"></div>
+                    </div>
+                    <div class="col">
+                        <p style="width:70px">PLANNED</p>
+                    </div>
+                    <div class="col">
+                        <div id="rectangle" [style.background-color]="'#99E3EC'"></div>
+                    </div>
+                    <div class="col">
+                        <p style="width:100px">ON PROGRESS</p>
+                    </div>
+                    <div class="col">
+                        <div id="rectangle" [style.background-color]="'#BCBD7C'"></div>
+                    </div>
+                    <div class="col">
+                        <p style="width:110px">FINISHED EARLY</p>
+                    </div>
+                    <div class="col">
+                        <div id="rectangle" [style.background-color]="'#93CB9A'"></div>
+                        </div>
+                    <div class="col">
+                        <p style="width:130px">FINISHED ON TIME</p>
+                    </div>
+                    <div class="col">
+                        <div id="rectangle" [style.background-color]="'#FF4424'"></div>
+                    </div>
+                    <div class="col">
+                        <p style="width:130px">FINISHED OVERDUE</p>
+                    </div>
+                    <div class="col">
+                        <div id="rectangle" [style.background-color]="'#FF2F81'"></div>
+                    </div>
+                    <div class="col">
+                        <p style="width:70px">OVERDUE</p>
+                    </div>
+                    <div class="col">
+                        <div id="rectangle" [style.background-color]="'#7B3614'"></div>
+                    </div>
+                    <div class="col">
+                        <p style="width:100px">POSTPONED</p>
+                    </div>
+                    <div class="col">
+                        <div id="rectangle" [style.background-color]="'#F3E88E'"></div>
+                    </div>
+                    <div class="col">
+                        <p style="width:50px">WARNING</p>
+                    </div>
+                </div>
+                <br><br>
+                <form [formGroup]="formNumRow">
+                    <div class="form-content">
+                        <div class="row">
+                                <div class="form-group" *ngIf="monthLengthObject.length != 0">
+                                        <div class="input-group">
+                                                <input
+                                                    type="text"
+                                                    style="margin-left:10px;width:70px;"
+                                                    class="form-control"
+                                                    formControlName="numOfRow"
+                                                    #numOfRow
+                                                    id="numOfRow"
+                                                    ng-modle="numOfRow"
+                                                    placeholder="EX: 5">
+                                                <span class="input-group-btn">
+                                                  <button class="btn btn-default" (click)="changeRowNumber()" type="button">Apply Row Number</button>
+                                                </span>
+                                              </div>
+                                </div>
+                        </div>
+                    </div>
+                </form>
+                        <div class="scrollX tableSize" *ngIf="dataTableExists">
+                        <table class="table table-bordered" id="dailyTable">
+                                    <thead class="thead-inverse">
+                                    <tr>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:-1px; width:43px; height:43px; text-align:center;" [attr.rowspan]="2" class="vertical-center">No</th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:42px; width:150px; height:43px; text-align:center;" class="vertical-center">Module Name</th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:192px; width:130px; height:43px; text-align:center;" class="vertical-center">Function Code</th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:322px; width:150px; height:43px; text-align:center;" class="vertical-center">Function Name</th>
+                                        <!-- <th style="position:absolute; margin-left:300px; width:105px; height:43px;" class="vertical-center">Planned PIC</th> -->
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:472px; width:170px; height:43px; text-align:center;" class="vertical-center">Actual PIC</th>
+                                        <!-- <th style="position:absolute; margin-left:642px; width:100px; height:43px; text-align:center;" class="vertical-center">Doc. Design</th> -->
+                                        <!-- <th style="position:absolute; margin-left:807px; width:100px; height:43px;" class="vertical-center">Dev Status</th> -->
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:642px; width:100px; height:43px; text-align:center;" class="vertical-center">Phase</th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:742px; width:100px; height:43px; text-align:center;" class="vertical-center">Dev Status</th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:842px; width:50px; height:43px; text-align:center;" class="vertical-center">%</th>
+                                        <th [ngStyle]="setStyles(indeks)" attr.colspan="{{monthColSpan(monthName[indeks].name,monthName[indeks].year)}}" *ngFor="let count of monthLengthObject; let indeks = index">{{monthName[indeks].name}}-{{monthName[indeks].year}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:-1px; width:43px; height:44px;"></th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:42px; width:150px; height:44px;"></th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:192px; width:130px; height:44px;"></th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:322px; width:150px; height:44px;"></th>
+                                        <!-- <th style="position:absolute; width:105px; margin-left:300px; height:44px;"></th> -->
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:472px; width:170px; height:44px;"></th>
+                                        <!-- <th style="position:absolute; margin-left:642px; width:100px; height:44px;"></th> -->
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:642px; width:100px; height:44px;"></th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:742px; width:100px; height:44px;"></th>
+                                        <th *ngIf="monthLengthObject.length != 0" style="position:absolute; margin-left:842px; width:50px; height:44px;"></th>
+                                        <th [ngStyle]="setStyles2(indeks)" *ngFor="let tgl of tglList; let indeks = index">{{tgl}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let row of dataTable; let i = index" (click)="setClickedRow(i)" [class.active]="i == selectedRow">
+                                            <td style="position:absolute; margin-left:-1px; width:43px; height:60px; background-color:white;">{{i+1}}</td>
+                                            <td style="position:absolute; margin-left:42px; width:150px; height:60px; background-color:white;">{{row.module}}</td>
+                                            <td style="position:absolute; margin-left:192px; width:130px; height:60px; background-color:white;">{{row.code}}</td>
+                                            <td style="position:absolute; margin-left:322px; width:150px; height:60px; background-color:white;">{{row.funcName}}</td>
+                                            <!-- <td style="position:absolute; width:105px; margin-left:300px; height:60px; background-color:white;">{{row.PPIC}}</td> -->
+                                            <td style="position:absolute; margin-left:472px; width:170px; height:60px; background-color:white;">{{row.APIC}}</td>
+                                            <!-- <td style="position:absolute; margin-left:642px; width:100px; height:60px; background-color:white;">{{row.DDS}}</td> -->
+                                            <!-- <td style="position:absolute; margin-left:807px; width:100px; height:60px; background-color:white;">{{row.devStatus}}</td> -->
+                                            <td style="position:absolute; margin-left:642px; width:100px; height:60px; background-color:white;">
+                                                <app-phase-detail *ngIf="ROLE == 4 || ROLE == 1" [phaseID]="row.phaseID" [type]="2" [hyperName]="row.Phase"></app-phase-detail>
+                                                <p *ngIf="ROLE == 2 || ROLE == 3">{{row.Phase}}</p>
+                                            </td>
+                                            <td style="position:absolute; margin-left:742px; width:100px; height:60px; background-color:white;">{{style4(row.devStatus)}}</td>
+                                            <td style="position:absolute; margin-left:842px; width:50px; height:60px; background-color:white;">
+                                                    <app-checklist
+                                                    *ngIf="globalUserID == row.pic_id || ROLE == 4 || ROLE == 1"
+                                                    [moduleName]="row.module"
+                                                    [funcName]="row.funcName"
+                                                    [phaseName]="row.Phase"
+                                                    [phaseID]="row.phaseID"
+                                                    [type]="2"
+                                                    [buttonName]="row.Percentage"
+                                                    [projectGlobalName]="projectGlobalName"
+                                                    (phase)="updatePhaseList(_FUNCTION_ID)"></app-checklist>
+
+                                                    <p *ngIf="globalUserID != row.pic_id && ROLE != 4 && ROLE != 1">{{row.Percentage}}</p>
+                                            </td>
+                                            <td [ngStyle]="setStyles3(indeks, countDay.status)" *ngFor="let countDay of dataMaster[i]; let indeks = index"></td>
+
+                                        </tr>
+                                    </tbody>
+                        </table>
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="pull-right">
+                        <ngb-pagination [collectionSize]="countPageDataTable" [(page)]="pageDataTable" [maxSize]="7" [pageSize]="pageSizeDataTable" (pageChange)="changePageDataTable()"></ngb-pagination>
+                    </div>
+            </ng-template>
+    </ngb-panel>
+    <ngb-panel id="static-3" title="Summary">
+        <ng-template  ngbPanelContent>
+                    <br>
+                    <h4>Summary by employee</h4>
+                    <br>
+                    <div class="row">
+                        <div style="display: block" class="summaryOverflow summaryHeight">
+                                        <table class="table table-bordered">
+                                                    <thead class="thead-inverse">
+                                                    <tr>
+                                                        <th>Employee / Stage</th>
+                                                        <th>Planned</th>
+                                                        <th>On Progress</th>
+                                                        <th>Finished Early</th>
+                                                        <th>Finished On Time</th>
+                                                        <th>Finished Overdue</th>
+                                                        <th>Overdue</th>
+                                                        <th>Postponed</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of tampungStatistikClean">
+                                                            <td bgcolor="#bfbfbf">{{item.name}}</td>
+                                                            <td>{{item.summary[0]}}</td>
+                                                            <td>{{item.summary[1]}}</td>
+                                                            <td>{{item.summary[2]}}</td>
+                                                            <td>{{item.summary[3]}}</td>
+                                                            <td>{{item.summary[4]}}</td>
+                                                            <td>{{item.summary[5]}}</td>
+                                                            <td>{{item.summary[6]}}</td>
+                                                            <td bgcolor="#bfbfbf">{{employeeStatistic(tampungStatistikClean.length,item.summary[0]+item.summary[1]+item.summary[2]+item.summary[3]+item.summary[4]+item.summary[5]+item.summary[6])}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                        </table>
+                        </div>
+                    </div>
+                    <hr>
+                    <br>
+                    <h4>Summary by employee</h4>
+                    <br>
+                    <div class="row">
+                        <div style="display: block" class="summaryOverflow summaryHeight">
+                                        <table class="table table-bordered">
+                                                    <thead class="thead-inverse">
+                                                    <tr>
+                                                        <th>Module / Stage</th>
+                                                        <th>Planned</th>
+                                                        <th>On Progress</th>
+                                                        <th>Finished Early</th>
+                                                        <th>Finished On Time</th>
+                                                        <th>Finished Overdue</th>
+                                                        <th>Overdue</th>
+                                                        <th>Postponed</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of tStatistikModuleClean">
+                                                            <td bgcolor="#bfbfbf">{{item.name}}</td>
+                                                            <td>{{item.summary[0]}}</td>
+                                                            <td>{{item.summary[1]}}</td>
+                                                            <td>{{item.summary[2]}}</td>
+                                                            <td>{{item.summary[3]}}</td>
+                                                            <td>{{item.summary[4]}}</td>
+                                                            <td>{{item.summary[5]}}</td>
+                                                            <td>{{item.summary[6]}}</td>
+                                                            <td bgcolor="#bfbfbf">{{item.summary[0]+item.summary[1]+item.summary[2]+item.summary[3]+item.summary[4]+item.summary[5]+item.summary[6]}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                        </table>
+                        </div>
+                    </div>
+
+                    <br><br>
+
+        </ng-template>
+    </ngb-panel>
+    </ngb-accordion>
+<!--DASHBOARD END-->
+
+<!--Change password admin modal start-->
+<ng-template #changeAdminPassword let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Change Admin Password</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+  <div class="modal-body">
+    <form [formGroup]="changeAdminPasswordForm">
+        <div class="form-content">
+            <div class="form-group">
+                <input
+                    hidden
+                    #name
+                    formControlName="id_user"
+                    type="text"
+                    ng-model="id_user"
+                    class="form-control input-underline input-lg"
+                    id="id_user">
+            </div>
+
+            <div class="form-group">
+                <input
+                    hidden
+                    #verified
+                    formControlName="verified"
+                    type="text"
+                    ng-model="verified"
+                    class="form-control input-underline input-lg"
+                    id="verified">
+            </div>
+
+            <div class="form-group">
+                <label>Old Password</label>
+                <input
+                    #password
+                    formControlName="oldPassword"
+                    type="password"
+                    ng-model="oldPassword"
+                    class="form-control input-underline input-lg"
+                    id="oldPassword">
+            </div>
+
+            <div class="form-group">
+                <label>New Password</label>
+                <input
+                    #password
+                    formControlName="newPassword"
+                    type="password"
+                    ng-model="newPassword"
+                    class="form-control input-underline input-lg"
+                    id="newPassword">
+            </div>
+            
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input
+                    #password
+                    formControlName="confirmPassword"
+                    type="password"
+                    ng-model="confirmPassword"
+                    class="form-control input-underline input-lg"
+                    id="confirmPassword">
+            </div>
+        </div>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary pull-right" (click)="changeAdminPassword()">Save</button>
+  </div>
+    
+</ng-template>
+
+<!--USER MANAGEMEN MAIN MODAL START-->
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">User Management</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!--MODAL BODY START-->
+    <div class="card mb-3">
+                <div class="card-header"></div>
+                <div class="card-block table-responsive">
+                    <form [formGroup]="formSearch">
+                        <div class="form-content">
+                            <div class="row">
+                                <div class="col-md-3">
+                                        <div class="form-group">
+                                                <input
+                                                    #employeeName
+                                                    formControlName="employeeName"
+                                                    type="text"
+                                                    ng-model="employeeName"
+                                                    class="form-control input-underline input-lg"
+                                                    id="employeeName"
+                                                    placeholder="Employee Name">
+                                            </div>
+                                </div>
+                                <div class="col-md-3">
+                                        <div class="form-group">
+                                                <input
+                                                    #employeeRole
+                                                    formControlName="employeeRole"
+                                                    type="text"
+                                                    ng-model="employeeRole"
+                                                    class="form-control input-underline input-lg"
+                                                    id="employeeRole"
+                                                    placeholder="Employee Role">
+                                            </div>
+                                </div>
+                                <div class="col-md-2">
+                                        <button class="btn btn-primary btn-block" (click)="searchClear()">
+                                                Clear
+                                        </button>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary btn-block" (click)="userSearch()">
+                                        Search
+                                    </button>
+                                </div>
+                            <div class="col-md-2">
+                                <app-new-user (updateMan)="updateUserMan()"></app-new-user>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table">
+                        <thead class="thead-inverse">
+                        <tr>
+                            <th width="20%">Name</th>
+                            <th width="10%">Username</th>
+                            <th width="15%">Activated Status</th>
+                            <th width="15%">User Role</th>
+                            <th width="40%" style="text-align:center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let user of response">
+                            <td>{{user.name}}</td>
+                            <td>{{user.username}}</td>
+
+                            <td *ngIf="user.verified_status !== 'accept'">
+                                <form [formGroup]="formsActivated">
+                                <select
+                                    (ngModelChange)="changeValue2($event, user.id_user)"
+                                    #activated
+                                    formControlName="activated"
+                                    id="activated"
+                                    class="form-control">
+                                            <option *ngIf="user.activated_status == 'active'" selected="active">active</option>
+                                            <option *ngIf="user.activated_status == 'active'">inactive</option>
+
+                                            <option *ngIf="user.activated_status == 'inactive'">active</option>
+                                            <option *ngIf="user.activated_status == 'inactive'" selected="inactive">inactive</option>
+                                </select>
+                                </form>
+                            </td>
+
+                            <td *ngIf="user.verified_status == 'accept' && user.activated_status == 'active'">active</td>
+                            <td *ngIf="user.verified_status == 'accept' && user.activated_status == 'inactive'">inactive</td>
+
+                            <td *ngIf="user.verified_status !== 'accept'">
+                                <form [formGroup]="formsSelect">
+                                <select
+                                    (ngModelChange)="changeValue($event, user.id_user)"
+                                    #role
+                                    formControlName="role"
+                                    id="role"
+                                    class="form-control"
+                                    >
+                                            <option *ngIf="user.role == '1'" selected="selected">PM</option>
+                                            <option *ngIf="user.role == '1'" >SA</option>
+                                            <option *ngIf="user.role == '1'" >PG</option>
+
+                                            <option *ngIf="user.role == '2'" >PM</option>
+                                            <option *ngIf="user.role == '2'" selected="selected">SA</option>
+                                            <option *ngIf="user.role == '2'" >PG</option>
+
+                                            <option *ngIf="user.role == '3'" >PM</option>
+                                            <option *ngIf="user.role == '3'" >SA</option>
+                                            <option *ngIf="user.role == '3'" selected="selected">PG</option>
+
+
+                                </select>
+                                </form>
+                            </td>
+
+                            <td *ngIf="user.verified_status == 'accept' && user.role == '1'">PM</td>
+                            <td *ngIf="user.verified_status == 'accept' && user.role == '2'">SA</td>
+                            <td *ngIf="user.verified_status == 'accept' && user.role == '3'">PG</td>
+                            <td align="center">
+                                <button *ngIf="user.verified_status == 'waiting'" class="btn btn-primary size-small" (click)="approveUser(user.id_user)">Approve</button>
+                                <button *ngIf="user.verified_status == 'waiting'" class="btn btn-danger size-small" (click)="deleteUser(user.id_user)">Reject</button>
+
+                                <button *ngIf="user.verified_status == 'accept'" class="btn btn-success size-small" (click)="openEditUser(contenEdit, user.name, user.role, user.id_user, user.activated_status, user.verified_status)">Edit</button>
+                                <button *ngIf="user.verified_status == 'accept'" class="btn btn-danger size-small" (click)="deleteUser(user.id_user)">Delete</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+     <!--MODAL BODY START-->
+  </div>
+  <div class="modal-footer">
+    <ngb-pagination [collectionSize]="countPage" [(page)]="page" pageSize="5" maxSize="7" (pageChange)="Page()" aria-label="Default pagination"></ngb-pagination>
+  </div>
+</ng-template>
+<!--USER MANAGEMEN MAIN MODAL END-->
+
+<!--USER MANAGEMEN EDIT USER MODAL START-->
+<ng-template #contenEdit let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit User</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formsEditUser">
+        <div class="form-content">
+            <div class="form-group">
+                <input
+                    hidden
+                    #name
+                    formControlName="id_user"
+                    type="text"
+                    ng-model="id_user"
+                    class="form-control input-underline input-lg"
+                    id="id_user">
+            </div>
+
+            <div class="form-group">
+                <input
+                    hidden
+                    #verified
+                    formControlName="verified"
+                    type="text"
+                    ng-model="verified"
+                    class="form-control input-underline input-lg"
+                    id="verified">
+            </div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input
+                    #name
+                    formControlName="name"
+                    type="text"
+                    ng-model="name"
+                    class="form-control input-underline input-lg"
+                    id="name">
+            </div>
+
+            <div class="form-group">
+                <label>New Password</label>
+                <input
+                    #password
+                    formControlName="password"
+                    type="password"
+                    ng-model="password"
+                    class="form-control input-underline input-lg"
+                    id="password">
+            </div>
+
+            <div class="form-group">
+                <label>Role</label>
+                <select
+                    #role
+                    formControlName="role"
+                    ng-model="role"
+                    id="role"
+                    class="form-control">
+                            <option>PM</option>
+                            <option>SA</option>
+                            <option>PG</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select
+                    #status
+                    formControlName="status"
+                    ng-model="status"
+                    id="status"
+                    class="form-control">
+                    <!--binding data status user untuk dijadikan sebagai default-->
+                        <option>active</option>
+                        <option>inactive</option>
+                </select>
+            </div>
+        </div>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary pull-right" (click)="editUser()">Save</button>
+  </div>
+</ng-template>
+<!--USER MANAGEMEN EDIT USER MODAL END-->
+
+<!--EDIT MODULE MODAL START-->
+<ng-template #editModuleContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Module/Function</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+                <form [formGroup]="formEditModule">
+                    <div class="form-content">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Choose Module</label>
+                                    <select
+                                        (ngModelChange)="fetchModuleData($event)"
+                                        #moduleName
+                                        formControlName="moduleName"
+                                        ng-model="moduleName"
+                                        id="moduleName"
+                                        class="form-control">
+                                                <option *ngFor="let item of moduleList">{{item.module_name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Module Name</label>
+                                    <div class="input-group">
+                                    <input
+                                        [readOnly]="ROLE == 2 || ROLE == 3 ?  true: false"
+                                        type="text"
+                                        class="form-control"
+                                        #moduleName2
+                                        formControlName="moduleName2"
+                                        ng-model="moduleName2"
+                                        id="moduleName2"
+                                        class="form-control input-underline input-lg">
+                                    <span *ngIf="ROLE == 4 || ROLE == 1" class="input-group-btn">
+                                        <button class="btn btn-secondary" type="button" (click)="editModuleName()">Edit</button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Module Code</label>
+                                    <div class="input-group">
+                                    <input
+                                        [readOnly]="ROLE == 2 || ROLE == 3 ?  true: false"
+                                        type="text"
+                                        class="form-control"
+                                        #moduleCode2
+                                        formControlName="moduleCode2"
+                                        ng-model="moduleCode2"
+                                        id="moduleCode2"
+                                        class="form-control input-underline input-lg">
+                                    <span *ngIf="ROLE == 4 || ROLE == 1" class="input-group-btn">
+                                        <button class="btn btn-secondary" type="button" (click)="editmoduleCode()">Edit</button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input
+                                hidden
+                                #moduleIDEdit
+                                formControlName="moduleIDEdit"
+                                type="text"
+                                ng-model="moduleIDEdit"
+                                class="form-control input-underline input-lg"
+                                id="moduleIDEdit">
+                        </div>
+
+                    </div>
+                </form>
+
+
+        <label>Function List</label>
+        <div class="card mb-3">
+            <div class="card-block">
+                <div class="scrollEdit">
+                    <table class="table">
+                        <tbody>
+                            <tr *ngFor="let item of funcListByModuleID">
+                                <td width="70%">{{item.function_name}}</td>
+                                <td width="15%">
+                                    <button class="btn btn-primary btn-block" (click)="openPhaseEdit(editFunctionContent, item.function_id, item.function_name, item.function_code)">Edit</button>
+                                </td>
+                                <td *ngIf="ROLE == 4 || ROLE == 1" width="15%">
+                                    <button class="btn btn-danger btn-block" (click)="deleteFunction(item.function_id)">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+  </div>
+  <div class="modal-footer">
+
+  </div>
+</ng-template>
+
+<!--EDIT MODULE MODAL END-->
+
+
+<!--EDIT FUNCTION MODAL START-->
+<ng-template #editFunctionContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Function/Phase</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+                <form [formGroup]="formEditRow2">
+                    <div class="form-content">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Module Name</label>
+                                    <input
+                                        readonly
+                                        #moduleName
+                                        formControlName="moduleName"
+                                        type="text"
+                                        ng-model="moduleName"
+                                        class="form-control input-underline input-lg"
+                                        id="moduleName">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Function Name</label>
+                                    <div class="input-group">
+                                    <input
+                                        [readOnly]="ROLE == 2 || ROLE == 3 ? true:false"
+                                        #funcName2
+                                        formControlName="funcName2"
+                                        type="text"
+                                        ng-model="funcName2"
+                                        class="form-control input-underline input-lg"
+                                        id="funcName2">
+                                    <span *ngIf="ROLE == 4 || ROLE == 1" class="input-group-btn">
+                                        <button class="btn btn-secondary" type="button" (click)="editFunctionName()">Edit</button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Function Code</label>
+                                    <div class="input-group">
+                                    <input
+                                        [readOnly]="ROLE == 2 || ROLE == 3 ? true:false"
+                                        #fCode2
+                                        formControlName="fCode2"
+                                        type="text"
+                                        ng-model="fCode2"
+                                        class="form-control input-underline input-lg"
+                                        id="fCode2">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-secondary" type="button" (click)="editFunctionCode()">Edit</button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+        <br>
+        <div class="row">
+                <label style="margin-left:8px;">Phase List </label>
+                <app-new-phase
+                [functionID]="_FUNCTION_ID"
+                (phase)="updatePhaseList(_FUNCTION_ID)">
+                </app-new-phase>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-block">
+                <div class="scrollEdit">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Phase Name</th>
+                                <th>Phase Start</th>
+                                <th>Phase End</th>
+                                <th>Phase Percentage</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of filteredPhaseWithName">
+                                    <td width="20%">
+                                        {{item.phase_name}}
+                                    </td>
+                                    <td width="20%">{{item.phase_start_date}}</td>
+                                    <td width="20%">{{item.phase_end_date}}</td>
+                                    <td width="20%">{{item.percentage}}%</td>
+                                    <td width="20%">
+                                        <div ngbDropdown class="d-inline-block">
+                                            <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>Action</button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                <app-checklist
+                                                    [moduleName]="currentModuleName"
+                                                    [funcName]="currentFuncName"
+                                                    [phaseName]="item.phase_name"
+                                                    [phaseID]="item.phase_id"
+                                                    [type]="1"
+                                                    [projectGlobalName]="projectGlobalName"
+                                                    (phase)="updatePhaseList(_FUNCTION_ID)">Checklist</app-checklist>
+                                                <!--HERE COY-->
+                                                <app-phase-detail
+                                                    [phaseID]="item.phase_id"
+                                                    [type]="1"
+                                                    [projectID]="item.project_id"
+                                                    (updateDashboard)="updateDashboard($event)"
+                                                    (updatePhaseList)="updatePhaseList($event)"></app-phase-detail>
+                                                <button class="dropdown-item" (click)="deletePhase(item.phase_id)">Delete</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+  </div>
+  <div class="modal-footer">
+
+  </div>
+</ng-template>
+
+<!--EDIT FUNCTION MODAL END-->
+
+
+

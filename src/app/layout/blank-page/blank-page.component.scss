@@ -1,0 +1,199 @@
+$topnav-background-color: #222;
+.topnav {
+    border-radius: 0;
+    background-color: $topnav-background-color;
+    padding : 6px;
+    z-index:2;
+    margin-left:5px;
+    width:100%;
+    .text-center{
+        text-align: center;
+        padding-left : 0;
+        cursor: pointer;
+    }
+    .top-right-nav{
+        .buy-now{
+            a{
+                color:#999;
+            }
+        }
+        .dropdown-menu{
+            top: 40px;
+            right: -5px;
+            left : auto;
+            .message-preview{
+                .media{
+                    .media-body{
+                        .media-heading{
+                            font-size: 14px;
+                            font-weight: bold;
+                            margin-bottom : 0;
+                        }
+                        p{
+                            margin : 0;
+                        }
+                        p.last{
+                            font-size : 13px;
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+            hr {
+                margin-top: 1px;
+                margin-bottom: 4px;
+            }
+        }
+    }
+}
+.messages {
+    width: 300px;
+    .media {
+        border-bottom: 1px solid #DDD;
+        padding: 5px 10px;
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+    .media-body {
+        h5 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .small {
+            margin: 0;
+        }
+        .last {
+            font-size: 12px;
+            margin: 0;
+        }
+    }
+}
+.header .navbar {
+    background: $topnav-background-color !important;
+}
+
+//table
+
+.table-th {
+    text-align: center;
+}
+
+//action button
+.size-small {
+    width:150px;
+}
+
+.size-large {
+    width:300px;
+}
+
+//modal main
+.centerin {
+    text-align: center;
+}
+
+.leftin {
+    text-align: left;
+}
+
+.scrollX {
+    width: 100%;
+    overflow-x: scroll; /* Scrollbar are always visible */
+    overflow-y: hidden;   /* Scrollbar is displayed as it's needed */
+}
+
+.summaryOverflow {
+    width: 100%;
+    overflow-x: scroll; /* Scrollbar are always visible */
+    overflow-y: scroll;   /* Scrollbar is displayed as it's needed */  
+}
+
+.summaryHeight {
+    height:300px;
+}
+
+.overflow {
+    height: 216px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.overflow-function {
+    height: 700px;
+    overflow-x: hidden;
+    overflow-y: scroll;   
+}
+
+.batas{
+    width:50%;
+}
+
+.scrollEdit{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 300px;
+}
+
+th{
+    white-space: nowrap;
+}
+
+.bSize{
+    width: 100px;
+}
+
+.YCenter{
+    vertical-align: center;
+}
+
+.tableSize{
+    height: 100%;
+}
+
+.thickness {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}
+
+.vertical-center {
+    vertical-align: middle !important;
+}
+
+.border{
+    border-radius: 10px;
+    border: 2px solid #b3b3b3;
+    padding: 20px; 
+    width: 100%;
+}
+
+/* .table tr.active td {
+  background-color:#123456 !important;
+  color: white;
+} */
+
+td {
+  padding: 0 40px;
+}
+
+.horizontal-center{
+    text-align: center;
+}
+
+#rectangle{
+    width:20px;
+    height:20px;
+}
+
+html, body    {
+    height: 100%;
+    width: 100%;
+  }
+
+.href{
+    cursor:pointer;
+}
+  

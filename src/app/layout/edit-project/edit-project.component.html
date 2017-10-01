@@ -1,0 +1,85 @@
+<!--EDIT FUNCTION MODAL START-->
+<ng-template #editProjectContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Project</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="allCenter">
+                <form [formGroup]="formEditProject">
+                    <div class="form-content">
+                   
+                        <div class="form-group">
+                            <label>Project Status</label>
+                            <select
+                                #projectStatus
+                                formControlName="projectStatus"
+                                ng-model="projectStatus"
+                                id="projectStatus"
+                                class="form-control">
+                                        <option></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Project Title</label>
+                            <input
+                                #projectTitle
+                                formControlName="projectTitle" 
+                                type="text" 
+                                ng-model="projectTitle" 
+                                class="form-control input-underline input-lg" 
+                                id="projectTitle">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <div class="input-group">
+                                <input 
+                                    formControlName="startDate"
+                                    (click)="startDate.toggle()" 
+                                    class="form-control"
+                                    placeholder="yyyy-mm-dd"
+                                    ng-model="startDate" 
+                                    ngbDatepicker 
+                                    #startDate="ngbDatepicker"
+                                >
+                                <div class="input-group-addon" (click)="startDate.toggle()" >
+                                    <span class="fa fa-calendar"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <div class="input-group">
+                                <input 
+                                    formControlName="endDate"
+                                    (click)="endDate.toggle()" 
+                                    class="form-control"
+                                    placeholder="yyyy-mm-dd"
+                                    ng-model="endDate" 
+                                    ngbDatepicker 
+                                    #endDate="ngbDatepicker"
+                                >
+                                <div class="input-group-addon" (click)="endDate.toggle()" >
+                                    <span class="fa fa-calendar"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+      </div>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary pull-right">Save</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(editProjectContent)">Edit Project</button>
+
+<!--EDIT FUNCTION MODAL END-->

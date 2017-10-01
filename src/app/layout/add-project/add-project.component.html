@@ -1,0 +1,99 @@
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">New Project</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formAddProject">
+        <div class="form-content">
+
+
+                <ngb-accordion [closeOthers]="true" activeIds="static-2">
+                        <ngb-panel id="static-1" title="Import project data">
+                          <ng-template ngbPanelContent>
+                                <input type="file" name="project_file" ng2FileSelect [uploader]="uploader" />
+                                <br><br>
+                                <button class="btn btn-primary pull-right" (click)="isAddedFileUpload(); uploader.uploadAll();">Import Data</button>
+                                <br>
+                          </ng-template>
+                        </ngb-panel>
+                        <ngb-panel id="static-2" title="Input project data">
+                          <ng-template ngbPanelContent>
+                                <div class="form-group">
+                                        <label>Project Name</label>
+                                        <input
+                                            #projectName
+                                            formControlName="projectName" 
+                                            type="text" 
+                                            ng-model="projectName" 
+                                            class="form-control input-underline input-lg" 
+                                            id="projectName">
+                                    </div>
+                        
+                                    <div class="form-group">
+                                        <label>Client Name</label>
+                                        <input
+                                            #clientName
+                                            formControlName="clientName" 
+                                            type="text" 
+                                            ng-model="clientName" 
+                                            class="form-control input-underline input-lg" 
+                                            id="clientName">
+                                    </div>
+                        
+                                    <div class="form-group">
+                                        <label>Client Address</label>
+                                        <input
+                                            #clientAddress
+                                            formControlName="clientAddress" 
+                                            type="text" 
+                                            ng-model="clientAddress" 
+                                            class="form-control input-underline input-lg" 
+                                            id="clientAddress">
+                                    </div>
+                        
+                                    <div class="form-group">
+                                        <label>Client Phone</label>
+                                        <input
+                                            #clientPhone
+                                            formControlName="clientPhone" 
+                                            type="number" 
+                                            ng-model="clientPhone" 
+                                            class="form-control input-underline input-lg" 
+                                            id="clientPhone">
+                                    </div>
+                        
+                                    <div class="form-group">
+                                        <label>Client Email</label>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">@</span>
+                                            <input 
+                                                #clientEmail
+                                                id="clientEmail"
+                                                formControlName="clientEmail"
+                                                type="email"
+                                                email 
+                                                ng-model="clientEmail"
+                                                class="form-control" 
+                                                placeholder="your-email@domain.com">
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary pull-right" (click)="addProject()">Save</button>
+
+                          </ng-template>
+                        </ngb-panel>
+                      </ngb-accordion>
+
+
+        </div>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary pull-right" (click)="open(content)">Add Project</button>

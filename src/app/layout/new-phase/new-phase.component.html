@@ -1,0 +1,123 @@
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Add New Phase</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+        <form [formGroup]="newPhase">
+            <div class="form-content">
+                <div class="form-group">
+                    <label>Phase Name</label>
+                    <input
+                        #phaseName
+                        formControlName="phaseName" 
+                        type="text" 
+                        ng-model="phaseName" 
+                        class="form-control input-underline input-lg" 
+                        id="phaseName">
+                </div>
+
+                <div class="form-group">
+                    <label>PIC Name</label>
+                    <ng-select [allowClear]="true"
+                                [items]="items2"
+                                (data)="refreshValue($event)"
+                                (selected)="selected($event)"
+                                (removed)="removed($event)"
+                                (typed)="typed($event)">
+                    </ng-select>
+                </div>
+
+                <div class="form-group">
+                  <label>Start Date</label>
+                  <div class="input-group">
+                      <input 
+                          formControlName="startDate" 
+                          (click)="startDate.toggle()"
+                          class="form-control"
+                          placeholder="Start Date"
+                          ng-model="startDate" 
+                          ngbDatepicker 
+                          #startDate="ngbDatepicker"
+                      >
+                      <div class="input-group-addon" (click)="startDate.toggle()" >
+                          <span class="fa fa-calendar"></span>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>End Date</label>
+                  <div class="input-group">
+                      <input 
+                          formControlName="endDate" 
+                          (click)="endDate.toggle()"
+                          class="form-control"
+                          placeholder="Start Date"
+                          ng-model="endDate" 
+                          ngbDatepicker 
+                          #endDate="ngbDatepicker"
+                      >
+                      <div class="input-group-addon" (click)="endDate.toggle()" >
+                          <span class="fa fa-calendar"></span>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Finished/Postponed Status</label>
+                    <select
+                        #phaseStatus
+                        formControlName="phaseStatus"
+                        ng-model="phaseStatus"
+                        id="phaseStatus"
+                        class="form-control">
+                            <option >Unknown</option>
+                            <option >Finished</option>
+                            <option >Postponed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Finished/Postponed Date</label>
+                    <div class="input-group">
+                        <input
+                            formControlName="phaseDate"
+                            (click)="phaseDate.toggle()" 
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            ng-model="phaseDate"
+                            ngbDatepicker 
+                            #phaseDate="ngbDatepicker"
+                        >
+                        <div class="input-group-addon" (click)="phaseDate.toggle()" >
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Note</label><br>
+                    <textarea 
+                        id="note"
+                        #note
+                        cols="70"
+                        class="form-control"
+                        formControlName="note"
+                        #note></textarea>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="pushNewPhase()">Save</button>
+    </div>
+  </ng-template>
+  
+  <label class="href" (click)="open(content)" [style.color]="'#0033cc'"[style.text-decoration]="'underline'" style="margin-left:10px;">Add New</label>
+  

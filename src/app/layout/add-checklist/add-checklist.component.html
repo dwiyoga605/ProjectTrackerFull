@@ -1,0 +1,20 @@
+        <div class="card mb-3">
+          <div class="card-block">
+              <form [formGroup]="formChecklist">
+                  <div class="form-content">
+                      <div class="form-group">
+                          <label>Checklist Name</label>
+                          <input
+                              #checklistName
+                              formControlName="checklistName" 
+                              type="text" 
+                              ng-model="checklistName" 
+                              class="form-control input-underline input-lg" 
+                              id="checklistName">
+                      </div>
+
+                  </div>
+              </form>
+          <button class="btn btn-primary pull-right" (click)="addChecklist()">Add Checklist</button>
+          </div>
+        </div>

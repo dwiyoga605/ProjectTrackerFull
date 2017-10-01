@@ -1,0 +1,109 @@
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Add New User</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+        <form [formGroup]="forms">
+            <div class="form-content">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input
+                        #fullName
+                        formControlName="fullName"
+                        type="text"
+                        ng-model="fullName"
+                        class="form-control input-underline input-lg"
+                        id="fullName"
+                        placeholder="Full Name"
+                        maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                        #username
+                        formControlName="username"
+                        type="text"
+                        ng-model="username"
+                        class="form-control input-underline input-lg"
+                        id="username"
+                        placeholder="User Name"
+                        maxlength="20">
+                </div>
+
+                <div class="form-group">
+                    <label for="employeeId">Employee ID</label>
+                    <input
+                        #employeeId
+                        formControlName="employeeId"
+                        type="text"
+                        ng-model="employeeId"
+                        class="form-control input-underline input-lg"
+                        id="employeeId"
+                        placeholder="Employee ID"
+                        maxlength="20">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        #password
+                        formControlName="password"
+                        type="password"
+                        ng-model="password"
+                        class="form-control input-underline input-lg"
+                        id="password"
+                        placeholder="Password">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPass">Confirm Password</label>
+                    <input
+                        #confirmPass
+                        (ngModelChange)="confirmPassword($event)"
+                        formControlName="confirmPass"
+                        type="password"
+                        ng-model="confirmPass"
+                        class="form-control input-underline input-lg"
+                        id="confirmPass"
+                        placeholder="Confirm Password">
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select
+                        #role
+                        formControlName="role"
+                        ng-model="role"
+                        id="role"
+                        placeholder="Confirm Password"
+                        class="form-control">
+                            <option>PM</option>
+                            <option>SA</option>
+                            <option>PG</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+    <div class="modal-footer">
+      <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" (click)="clear()">Clear</button>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary pull-right" (click)="onSignUp(fullName, username, employeeId, password, role, confirmPass)">Register</button>
+        </div>
+      </div>
+
+    </div>
+</ng-template>
+
+<button class="btn btn-success btn-block" (click)="open(content)">New User</button>
